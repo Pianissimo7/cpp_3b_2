@@ -2,34 +2,34 @@
 
 using namespace ariel;
 
-Fraction::Fraction(int a, int b) {
-    if (b == 0) {
+Fraction::Fraction(int num, int deno) {
+    if (deno == 0) {
         throw std::invalid_argument("denominator cannot be 0");
     }
-    this->a = a;
-    this->b = b;
+    this->a = num;
+    this->b = deno;
     simplify();
 }
-Fraction::Fraction(double d) {
-    std::string str = std::to_string(d);
+Fraction::Fraction(double dec) {
+    std::string str = std::to_string(dec);
 
     std::size_t pos = str.find('.');
     if (pos == std::string::npos) {
-        this->a = d;
+        this->a = dec;
         this->b = 1.0;
         return;
     }
 
     int numDecimals = 3;
     this->b = std::pow(10, numDecimals);
-    this->a = std::floor(std::abs(d) * this->b + 0.5) * (d < 0 ? -1 : 1);
+    this->a = std::floor(std::abs(dec) * this->b + 0.5) * (dec < 0 ? -1 : 1);
 
     this->simplify();
 }
-Fraction::Fraction(const Fraction &other) {
-    this->a = other.getNumerator();
-    this->b = other.getDenominator();
-}
+// Fraction::Fraction(const Fraction &other) {
+//     this->a = other.getNumerator();
+//     this->b = other.getDenominator();
+// }
 int Fraction::getNumerator() const {
     return this->a;
 }
@@ -51,9 +51,6 @@ void Fraction::simplify() {
         this->a *= -1;
         this->b *= -1;
     }
-}
-Fraction::~Fraction() {
-
 }
 // Arithmetic operators
 Fraction Fraction::operator+(const Fraction& other) const {
@@ -135,12 +132,12 @@ bool Fraction::operator>(const Fraction& other) const {
 }
 
 // Input/output operators
-std::ostream& ariel::operator<<(std::ostream& os, const Fraction& fraction) {
-    return os << fraction.a << "/" << fraction.b;
+std::ostream& ariel::operator<<(std::ostream& ostream, const Fraction& fraction) {
+    return ostream << fraction.a << "/" << fraction.b;
 }
-std::istream& ariel::operator>>(std::istream& is, Fraction& fraction) {
+std::istream& ariel::operator>>(std::istream& istream, Fraction& fraction) {
     int a, b;
-    if (is >> a >> b) {
+    if (istream >> a >> b) {
         if (b == 0) {
             throw std::runtime_error("denominator cannot be 0");
         }
@@ -152,81 +149,81 @@ std::istream& ariel::operator>>(std::istream& is, Fraction& fraction) {
     else {
         throw std::runtime_error("Invalid input: cannot extract numerator and denominator");
     }
-    return is;
+    return istream;
 }
 
 // double & fraction operators
-Fraction ariel::operator+(double d, const Fraction& other) {
-    return Fraction(d) + other;
+Fraction ariel::operator+(double dec, const Fraction& other) {
+    return Fraction(dec) + other;
 }
-Fraction ariel::operator-(double d, const Fraction& other) {
-    return Fraction(d) - other;
+Fraction ariel::operator-(double dec, const Fraction& other) {
+    return Fraction(dec) - other;
 }
-Fraction ariel::operator*(double d, const Fraction& other) {
-    return Fraction(d) * other;
+Fraction ariel::operator*(double dec, const Fraction& other) {
+    return Fraction(dec) * other;
 }
-Fraction ariel::operator/(double d, const Fraction& other) {
+Fraction ariel::operator/(double dec, const Fraction& other) {
     if (other.a == 0) {
         throw std::runtime_error("denominator cannot be 0");
     }
-    return Fraction(d) / other;
+    return Fraction(dec) / other;
 }
 
 // fraction & double operators
-Fraction ariel::operator+(const Fraction& other, double d) {
-    return other + Fraction(d);
+Fraction ariel::operator+(const Fraction& other, double dec) {
+    return other + Fraction(dec);
 }
-Fraction ariel::operator-(const Fraction& other, double d) {
-    return other - Fraction(d);
+Fraction ariel::operator-(const Fraction& other, double dec) {
+    return other - Fraction(dec);
 }
-Fraction ariel::operator*(const Fraction& other, double d) {
-    return other * Fraction(d);
+Fraction ariel::operator*(const Fraction& other, double dec) {
+    return other * Fraction(dec);
 }
-Fraction ariel::operator/(const Fraction& other, double d) {
-    if (d == 0) {
+Fraction ariel::operator/(const Fraction& other, double dec) {
+    if (dec == 0) {
         throw std::runtime_error("denominator cannot be 0");
     }
-    return other / Fraction(d);
+    return other / Fraction(dec);
 }
 
 // double & fraction comparison operators
-bool ariel::operator==(double d, const Fraction& frac) {
-    return Fraction(d) == frac;
+bool ariel::operator==(double dec, const Fraction& frac) {
+    return Fraction(dec) == frac;
 }
-bool ariel::operator!=(double d, const Fraction& frac) {
-    return Fraction(d) != frac;
+bool ariel::operator!=(double dec, const Fraction& frac) {
+    return Fraction(dec) != frac;
 }
-bool ariel::operator<(double d, const Fraction& frac) {
-    return Fraction(d) < frac;
+bool ariel::operator<(double dec, const Fraction& frac) {
+    return Fraction(dec) < frac;
 }
-bool ariel::operator<=(double d, const Fraction& frac) {
-    return Fraction(d) <= frac;
+bool ariel::operator<=(double dec, const Fraction& frac) {
+    return Fraction(dec) <= frac;
 }
-bool ariel::operator>(double d, const Fraction& frac) {
-    return Fraction(d) > frac;
+bool ariel::operator>(double dec, const Fraction& frac) {
+    return Fraction(dec) > frac;
 }
-bool ariel::operator>=(double d, const Fraction& frac) {
-    return Fraction(d) >= frac;
+bool ariel::operator>=(double dec, const Fraction& frac) {
+    return Fraction(dec) >= frac;
 }
 
 // fraction & double comparison operators
-bool ariel::operator==(const Fraction& frac, double d) {
-    return frac == Fraction(d);
+bool ariel::operator==(const Fraction& frac, double dec) {
+    return frac == Fraction(dec);
 }
-bool ariel::operator!=(const Fraction& frac, double d) {
-    return frac != Fraction(d);
+bool ariel::operator!=(const Fraction& frac, double dec) {
+    return frac != Fraction(dec);
 }
-bool ariel::operator<(const Fraction& frac, double d) {
-    return frac < Fraction(d);
+bool ariel::operator<(const Fraction& frac, double dec) {
+    return frac < Fraction(dec);
 }
-bool ariel::operator<=(const Fraction& frac, double d) {
-    return frac <= Fraction(d);
+bool ariel::operator<=(const Fraction& frac, double dec) {
+    return frac <= Fraction(dec);
 }
-bool ariel::operator>(const Fraction& frac, double d) {
-    return frac > Fraction(d);
+bool ariel::operator>(const Fraction& frac, double dec) {
+    return frac > Fraction(dec);
 }
-bool ariel::operator>=(const Fraction& frac, double d) {
-    return frac >= Fraction(d);
+bool ariel::operator>=(const Fraction& frac, double dec) {
+    return frac >= Fraction(dec);
 }
 
 // Increment/decrement operators
